@@ -359,24 +359,6 @@
   </style>
 </head>
 <body>
-function getRunnersData() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
-  var rows = sheet.getDataRange().getValues();
-  var headers = rows.shift();
-  return rows.map(function(r) {
-    return {
-      name: String(r[0] || ''),
-      totalkm: parseFloat(r[1]) || 0,
-      overallstatus: String(r[2] || ''),
-      profileimage: String(r[3] || ''),
-      lastupdate: r[4] ? new Date(r[4]).toISOString() : ''
-    };
-  });
-}</pre>
-      </div>
-    </div>
-  </div>
-
   <!-- ส่วนแสดงผลหลัก หน้าตาเหมือน Power Pages เดิม 100% -->
   <div class="leaderboard-wrapper">
     <!-- ส่วนเช็ค Error หลังบ้าน -->
