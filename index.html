@@ -173,10 +173,11 @@
     .runner-card.rank-2 { border-left-color: #d4b881; background: #fdfaf4; }
     .runner-card.rank-3 { border-left-color: #e0cca1; background: #fdfcf9; }
 
-    .rank-number { font-size: 1.5rem; font-weight: 800; color: #001941; width: 50px; text-align: center; }
+    .rank-number { font-size: 1.5rem; font-weight: 800; color: #001941; width: 50px; text-align: center; flex-shrink: 0; }
     .runner-info { flex-grow: 1; padding: 0 20px; display: flex; flex-direction: column; justify-content: center; }
     .runner-name-wrapper { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
     .runner-name { font-size: 1.25rem; font-weight: 700; color: #001941; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .medal-icon { font-size: 1.4rem; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
 
     .card-avatar {
       width: 48px;
@@ -198,6 +199,7 @@
 
     .status-badge { font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; background: #e5e6e7; color: #001941; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
     .status-finisher { background: #c9a461; color: #001941; }
+    .finish-time-tag { font-size: 0.75rem; color: #666; font-weight: 500; }
 
     .progress-container { background: #e5e6e7; border-radius: 8px; height: 8px; width: 100%; overflow: hidden; margin-top: 5px; }
     .progress-bar { background: linear-gradient(90deg, #002d75, #001941); height: 100%; border-radius: 8px; transition: width 0.4s ease; }
@@ -444,16 +446,20 @@
         var posPercent = (posKm / 93.0) * 100;
         if (posPercent > 100) posPercent = 100;
 
-        // ลำดับ 1 & 4 = ทอง / 2 & 5 = เงิน / 3 & 6 = ทองแดง
+        // สีกรอบการ์ดและเส้นทาง: 1 & 4 = ทอง / 2 & 5 = เงิน / 3 & 6 = ทองแดง
         var rClass = "";
         if (rank === 1 || rank === 4) rClass = "rank-1";
         else if (rank === 2 || rank === 5) rClass = "rank-2";
         else if (rank === 3 || rank === 6) rClass = "rank-3";
 
-        var rankBadge = "#" + rank;
-        if (rank === 1 || rank === 4) rankBadge = "🥇";
-        else if (rank === 2 || rank === 5) rankBadge = "🥈";
-        else if (rank === 3 || rank === 6) rankBadge = "🥉";
+        // แสดงตัวเลขลำดับ (#1, #2, #3, ...) ด้านซ้ายแทนเหรียญเดิม
+        var rankNumberText = "#" + rank;
+
+        // เหรียญรางวัลย้ายมาแสดงด้านขวาของรูป
+        var medalBadge = "";
+        if (rank === 1 || rank === 4) medalBadge = '<span class="medal-icon">🥇</span>';
+        else if (rank === 2 || rank === 5) medalBadge = '<span class="medal-icon">🥈</span>';
+        else if (rank === 3 || rank === 6) medalBadge = '<span class="medal-icon">🥉</span>';
 
         var safeName = escapeHtml(runner.name || "นักวิ่ง");
         var initials = escapeHtml((runner.name || "R").slice(0, 2));
@@ -487,12 +493,12 @@
 
         cardsHtml +=
           '<div class="runner-card ' + rClass + '">' +
-            '<div class="rank-number">' + rankBadge + '</div>' +
+            '<div class="rank-number">' + rankNumberText + '</div>' +
             '<div class="runner-info">' +
               '<div class="runner-name-wrapper">' +
                 cardAvatarHtml +
                 '<div class="runner-name">' +
-                  safeName + ' ' + statusHtml +
+                  (medalBadge ? medalBadge + ' ' : '') + safeName + ' ' + statusHtml +
                 '</div>' +
               '</div>' +
               '<div class="progress-container">' +
