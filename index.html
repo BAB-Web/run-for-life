@@ -359,48 +359,6 @@
   </style>
 </head>
 <body>
-
-  <!-- แถบเครื่องมือช่วยตั้งค่าการเชื่อมต่ออย่างปลอดภัย (ซ่อนได้ หรือซ่อนอัตโนมัติเมื่อใช้งานจริง) -->
-  <div class="admin-toolbar" id="admin-toolbar">
-    <div class="admin-bar-inner">
-      <div class="admin-bar-title">
-        <span>🔒 โหมดจำลองหน้าเว็บจริง (Standalone HTML/JS แทน Power Pages)</span>
-        <span class="admin-badge" id="data-source-badge">กำลังแสดงข้อมูลจำลอง</span>
-      </div>
-      <div class="admin-actions">
-        <button type="button" class="admin-btn secondary" id="btn-toggle-guide">📖 วิธีนำไปวางใช้งานแบบปลอดภัย & ฟรี</button>
-        <button type="button" class="admin-btn" id="btn-hide-toolbar">ซ่อนแถบนี้</button>
-      </div>
-    </div>
-
-    <div class="setup-panel" id="setup-panel">
-      <div class="setup-tabs">
-        <button type="button" class="setup-tab active" id="tab-sp">1. ใช้ภายในองค์กร (SharePoint Online — ปลอดภัยสูงสุด)</button>
-        <button type="button" class="setup-tab" id="tab-gas">2. ใช้ผ่าน Google Apps Script (ซ่อนตาราง Google Sheets เป็นส่วนตัว)</button>
-      </div>
-
-      <div class="setup-content" id="content-sp">
-        <strong>วิธีที่ 1: โฮสต์บน SharePoint Online คู่กับ SharePoint List (ฟรี 100% ใน Microsoft 365 และข้อมูลไม่รั่วไหลออกนอกบริษัท)</strong>
-        <ol>
-          <li>สร้าง <strong>SharePoint List</strong> ชื่อ <code>VirtualRun</code> โดยมีคอลัมน์: <code>Title</code> (ชื่อนักวิ่ง), <code>TotalKM</code> (Number), <code>OverallStatus</code> (Text), <code>ProfileImage</code> (Text/URL), และ <code>LastUpdate</code> (Date & Time)</li>
-          <li>ใน <strong>Power Automate</strong> เปลี่ยนจาก Dataverse มาใช้ Action <strong>Create item / Update item ของ SharePoint</strong> (เป็น Standard Connector ฟรี)</li>
-          <li>เปลี่ยนนามสกุลไฟล์ HTML นี้เป็น <code>leaderboard.aspx</code> แล้วอัปโหลดขึ้นโฟลเดอร์ <strong>Site Assets</strong> หรือ <strong>Documents</strong> ใน SharePoint ของบริษัท — พนักงานที่ล็อกอิน Microsoft 365 ของบริษัทเท่านั้นจึงจะเปิดดูหน้าเว็บและดึงข้อมูลได้โดยอัตโนมัติ!</li>
-        </ol>
-      </div>
-
-      <div class="setup-content" id="content-gas" style="display: none;">
-        <strong>วิธีที่ 2: โฮสต์บน Google Apps Script คู่กับ Google Sheets ส่วนตัว (ฟรี 100% ไม่ต้องเปิดไฟล์ Sheet เป็นสาธารณะ)</strong>
-        <ol>
-          <li>สร้างไฟล์ <strong>Google Sheets</strong> (ตั้งค่าแชร์เป็น <em>Private เฉพาะคุณ</em>) สร้างหัวตารางแถวที่ 1: <code>name</code>, <code>totalkm</code>, <code>overallstatus</code>, <code>profileimage</code>, <code>lastupdate</code></li>
-          <li>ใน <strong>Power Automate</strong> ใช้ <strong>Google Sheets Connector</strong> (ฟรี) อัปเดตข้อมูลนักวิ่งลงใน Sheet</li>
-          <li>ที่ไฟล์ Google Sheets กดเมนู <strong>Extensions &gt; Apps Script</strong> แล้ววางโค้ดด้านล่างลงใน <code>Code.gs</code> และนำไฟล์ HTML นี้ไปใส่ในไฟล์ชื่อ <code>index.html</code> จากนั้นกด <strong>Deploy &gt; New deployment &gt; Web app</strong>:</li>
-        </ol>
-        <pre>function doGet() {
-  return HtmlService.createHtmlOutputFromFile('index')
-    .setTitle('🏆 Run for Life — Leaderboard')
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
-}
-
 function getRunnersData() {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
   var rows = sheet.getDataRange().getValues();
