@@ -545,7 +545,15 @@
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
     }
-
+function getProfileImageUrl(imgPath) {
+  if (!imgPath) return "";
+  var clean = String(imgPath).trim().replace(/^\/+/, ""); // ตัด / ข้างหน้าออก
+  if (clean.indexOf("http://") === 0 || clean.indexOf("https://") === 0) {
+    return clean;
+  }
+  // ชี้ไปยังโฟลเดอร์ images/ (หรือถ้าเก็บรูปไว้ที่หน้าแรก ให้ตัด 'images/' ออก)
+  return "images/" + clean;
+}
     // ============================================================================
     // 3. ฟังก์ชันวาดข้อมูลลงบนหน้าเว็บ (เหมือนเทมเพลต Power Pages เดิม 100%)
     // ============================================================================
@@ -602,7 +610,7 @@
 
         var safeName = escapeHtml(runner.name || "นักวิ่ง");
         var initials = escapeHtml((runner.name || "R").slice(0, 2));
-        var safeImg = runner.profileimage ? escapeHtml(runner.profileimage) : "";
+        var safeImg = runner.profileimage ? escapeHtml(getProfileImageUrl(runner.profileimage)) : "";
 
         // Avatar บนแผนที่
         var avatarInner = safeImg
